@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b35">
+  <title>CFM International Bank | Digital Banking Portal</title>
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="CFM International Bank home">
+      <span class="logo" aria-hidden="true">CFM</span>
+      <span><b>CFM INTERNATIONAL</b><small>DIGITAL BANKING PORTAL</small></span>
+    </a>
+    <div class="top-actions">
+      <label class="sr-only" for="language">Language</label>
+      <select id="language">
+        <option value="auto">Auto language</option><option value="en">English</option>
+        <option value="es">Español</option><option value="fr">Français</option>
+        <option value="de">Deutsch</option><option value="pl">Polski</option>
+        <option value="pt">Português</option><option value="ar">العربية</option>
+        <option value="ur">اردو</option>
+      </select>
+      <button id="signout" class="button ghost hidden" data-i18n="signOut">Sign out</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="notice"><b data-i18n="demoNotice">This is a non-production banking interface. No real deposits, payments, or banking services are provided.</b></div>
+
+    <section id="authView" class="auth card">
+      <div class="logo big">CFM</div>
+      <h1 data-i18n="welcomeTitle">Welcome to CFM International</h1>
+      <p class="muted" data-i18n="loginSubtitle">Secure access to your CFM account.</p>
+      <form id="loginForm">
+        <label for="email" data-i18n="email">Email address</label>
+        <input id="email" type="email" autocomplete="username" required>
+        <label for="password" data-i18n="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <button class="button primary full" type="submit" data-i18n="login">Sign in</button>
+      </form>
+      <p id="authMessage" class="message" role="status"></p>
+      <p class="tiny muted">Access is available to accounts created by the account administrator.</p>
+    </section>
+
+    <section id="customerView" class="hidden">
+      <div class="heading">
+        <div><p class="eyebrow" data-i18n="customerDashboard">CUSTOMER DASHBOARD</p><h1><span data-i18n="hello">Hello</span>, <span id="customerName">Customer</span></h1><p class="muted" data-i18n="overview">Here is your account overview.</p></div>
+        <span class="avatar">C</span>
+      </div>
+      <div class="balance-card">
+        <div class="balance-top"><span data-i18n="availableBalance">Available balance</span><span class="pill">● ACCOUNT</span></div>
+        <div id="balance" class="balance">—</div>
+        <p data-i18n="accountNumber">Account number</p>
+        <div class="account-line"><strong id="accountNumberValue">—</strong><button id="copyAccount" class="button outline" data-i18n="copy">Copy</button></div>
+        <p class="tiny">CFM International · <span id="currencyLabel">GBP</span></p>
+      </div>
+      <div class="grid two">
+        <section class="card">
+          <h2 data-i18n="transferMoney">Transfer funds</h2>
+          <p class="muted" data-i18n="transferHelp">Transfers are limited to accounts registered within this interface.</p>
+          <form id="transferForm">
+            <label for="receiverName" data-i18n="receiverName">Receiver full name</label>
+            <input id="receiverName" maxlength="100" required>
+            <label for="receiverAccount" data-i18n="receiverAccount">Receiver account number</label>
+            <input id="receiverAccount" inputmode="numeric" maxlength="24" required>
+            <label for="receiverCountry" data-i18n="receiverCountry">Receiver country</label>
+            <select id="receiverCountry" required>
+              <option value="United Kingdom">United Kingdom</option><option value="Nigeria">Nigeria</option>
+              <option value="United States">United States</option><option value="Canada">Canada</option>
+              <option value="France">France</option><option value="Germany">Germany</option>
+              <option value="Spain">Spain</option><option value="Poland">Poland</option>
+              <option value="Portugal">Portugal</option><option value="Other">Other</option>
+            </select>
+            <label for="amount" data-i18n="amount">Amount</label>
+            <input id="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required>
+            <label for="description" data-i18n="description">Description (optional)</label>
+            <input id="description" maxlength="120">
+            <button class="button primary full" type="submit" data-i18n="sendTransfer">Make transfer</button>
+          </form>
+          <p id="transferMessage" class="message" role="status"></p>
+        </section>
+        <section class="card">
+          <div class="section-title"><div><h2 data-i18n="transactions">Transactions</h2><p class="muted" data-i18n="lastFive">Latest five transactions</p></div></div>
+          <div id="transactionList"><p class="muted">Loading…</p></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="adminView" class="hidden">
+      <div class="heading"><div><p class="eyebrow">ADMINISTRATOR</p><h1 data-i18n="adminTitle">Admin dashboard</h1><p class="muted" data-i18n="adminSubtitle">Manage customer accounts and account balances.</p></div></div>
+      <div class="grid two">
+        <section class="card">
+          <h2 data-i18n="createAccount">Create customer account</h2>
+          <form id="createForm">
+            <label for="newName" data-i18n="fullName">Full name</label><input id="newName" required maxlength="100">
+            <label for="newEmail" data-i18n="email">Email address</label><input id="newEmail" type="email" required>
+            <label for="newPhone" data-i18n="phone">Phone (optional)</label><input id="newPhone" type="tel" maxlength="30">
+            <label for="newCountry" data-i18n="country">Country</label><input id="newCountry" required value="United Kingdom" maxlength="80">
+            <label for="newCurrency" data-i18n="currency">Account currency</label>
+            <select id="newCurrency"><option value="GBP">GBP — Pound sterling</option><option value="NGN">NGN — Naira</option><option value="USD">USD — US dollar</option><option value="EUR">EUR — Euro</option><option value="CAD">CAD — Canadian dollar</option></select>
+            <label for="newPassword" data-i18n="temporaryPassword">Temporary password (min 12 characters)</label><input id="newPassword" type="password" minlength="12" required autocomplete="new-password">
+            <label for="initialBalance" data-i18n="initialBalance">Initial simulated balance</label><input id="initialBalance" type="number" min="0" step="0.01" value="0" required>
+            <label for="initialNote" data-i18n="initialNote">Opening note / optional transaction description</label><input id="initialNote" maxlength="120" placeholder="Opening balance note">
+            <button class="button primary full" type="submit" data-i18n="create">Create account</button>
+          </form>
+          <p id="createMessage" class="message" role="status"></p>
+        </section>
+        <section class="card">
+          <h2 data-i18n="creditAccount">Credit account</h2>
+          <form id="creditForm">
+            <label for="creditAccount" data-i18n="accountNumber">Account number</label><input id="creditAccount" required>
+            <label for="creditAmount" data-i18n="amount">Amount</label><input id="creditAmount" type="number" min="0.01" step="0.01" required>
+            <label for="creditReason" data-i18n="creditReason">Reason / audit note</label><input id="creditReason" maxlength="120" required>
+            <button class="button primary full" type="submit" data-i18n="addMoney">Credit account</button>
+          </form>
+          <p id="creditMessage" class="message" role="status"></p>
+          <hr>
+          <h2 data-i18n="accounts">Customer accounts</h2>
+          <button id="refreshAccounts" class="button outline" data-i18n="refresh">Refresh list</button>
+          <div id="accountList"><p class="muted">Use refresh to load customer accounts.</p></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="receiptView" class="card receipt hidden">
+      <div class="receipt-head"><div class="logo">CFM</div><div><h2 data-i18n="receipt">Transfer receipt</h2><p class="muted">ACCOUNT ACTIVITY RECORD — NOT A PAYMENT CONFIRMATION</p></div></div>
+      <div id="receiptDetails"></div>
+      <button id="printReceipt" class="button primary" data-i18n="printReceipt">Print receipt</button>
+      <button id="closeReceipt" class="button outline" data-i18n="close">Close</button>
+    </section>
+  </main>
+  <footer><b>CFM INTERNATIONAL BANK</b><p>Non-production interface. This service is not a licensed bank and does not hold or transfer real funds.</p></footer>
+  <script src="/index.js" defer></script>
+</body>
+</html>
