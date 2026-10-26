@@ -4,13 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#0a0e1a">
-  <meta name="description" content="CFM International — Digital Banking">
   <title>CFM International</title>
   <link rel="stylesheet" href="index.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Auth -->
+  <!-- AUTH -->
   <section id="authView" class="screen">
     <div class="auth-card">
       <div class="logo-mark">CFM</div>
@@ -27,14 +26,16 @@
     </div>
   </section>
 
-  <!-- Customer Dashboard -->
+  <!-- CUSTOMER -->
   <section id="customerView" class="screen hidden">
     <div class="phone-frame">
       <div class="status-bar"></div>
 
-      <!-- Header -->
       <header class="app-header">
-        <div class="avatar-sm" id="customerAvatar">C</div>
+        <div class="avatar-sm" id="customerAvatar">
+          <img id="customerPhoto" class="hidden" alt="Owner">
+          <span id="customerInitial">C</span>
+        </div>
         <div class="tabs">
           <button class="tab active">Accounts</button>
           <button class="tab">Cards</button>
@@ -49,7 +50,6 @@
       </header>
 
       <main class="app-content">
-        <!-- Account Card -->
         <div class="account-card">
           <div class="card-top">
             <span class="card-label" id="accountCurrencyLabel">USD Account</span>
@@ -61,31 +61,21 @@
             <button class="copy-btn" id="copyAccount">Copy</button>
           </div>
           <div class="card-actions">
-            <button class="action-btn" id="transferBtn">
-              <span class="plus">+</span> Transfer
-            </button>
-            <button class="action-btn" id="depositBtn">
-              <span class="plus">+</span> Deposit
-            </button>
-            <button class="action-btn" id="tradeBtn">
-              <span class="plus">+</span> Trade
-            </button>
-            <button class="action-btn" id="cryptoBtn">
-              <span class="plus">+</span> Crypto
-            </button>
+            <button class="action-btn" id="transferBtn"><span class="plus">+</span> Transfer</button>
+            <button class="action-btn" id="depositBtn"><span class="plus">+</span> Deposit</button>
+            <button class="action-btn" id="tradeBtn"><span class="plus">+</span> Trade</button>
+            <button class="action-btn" id="cryptoBtn"><span class="plus">+</span> Crypto</button>
           </div>
         </div>
 
-        <!-- Transactions -->
         <section class="section">
           <div class="section-header">
             <h2>Transactions</h2>
-            <button class="link" id="seeAllTx">See all</button>
+            <button class="link">See all</button>
           </div>
           <div id="transactionList" class="tx-list"></div>
         </section>
 
-        <!-- Net Worth -->
         <section class="section net-worth">
           <h2>Net Worth</h2>
           <div class="net-value" id="netWorth">€0.00</div>
@@ -106,22 +96,21 @@
         </section>
       </main>
 
-      <!-- Bottom Navigation -->
       <nav class="bottom-nav">
-        <button class="nav-item active" data-tab="overview">
+        <button class="nav-item active">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
           </svg>
           <span>Overview</span>
         </button>
-        <button class="nav-item" data-tab="transactions">
+        <button class="nav-item">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
           <span>Transactions</span>
         </button>
-        <button class="nav-item" data-tab="settings">
+        <button class="nav-item">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="3"/>
             <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -148,7 +137,6 @@
           <option value="Canada">Canada</option>
           <option value="France">France</option>
           <option value="Germany">Germany</option>
-          <option value="Spain">Spain</option>
           <option value="Other">Other</option>
         </select>
         <label>Amount</label>
@@ -162,25 +150,30 @@
     </div>
   </section>
 
-  <!-- Admin -->
+  <!-- ADMIN -->
   <section id="adminView" class="screen hidden">
     <div class="admin-wrap">
       <header class="admin-header">
         <h1>Admin</h1>
         <button id="adminSignOut" class="btn ghost">Sign out</button>
       </header>
+
       <div class="admin-grid">
         <div class="card">
           <h2>Create account</h2>
           <form id="createForm">
             <label>Full name</label>
             <input id="newName" required>
+
             <label>Email</label>
             <input id="newEmail" type="email" required>
+
             <label>Phone</label>
             <input id="newPhone" type="tel">
+
             <label>Country</label>
             <input id="newCountry" value="United Kingdom" required>
+
             <label>Currency</label>
             <select id="newCurrency">
               <option value="GBP">GBP</option>
@@ -188,14 +181,27 @@
               <option value="EUR">EUR</option>
               <option value="NGN">NGN</option>
             </select>
-            <label>Password (min 12)</label>
-            <input id="newPassword" type="password" minlength="12" required>
+
+            <label>Password (min 6 characters)</label>
+            <input id="newPassword" type="password" minlength="6" required>
+
             <label>Initial balance</label>
             <input id="initialBalance" type="number" min="0" step="0.01" value="0">
-            <button class="btn primary full" type="submit">Create</button>
+
+            <!-- PHOTO UPLOAD -->
+            <label>Passport / Photo of owner</label>
+            <div class="photo-upload">
+              <input type="file" id="ownerPhoto" accept="image/*">
+              <div class="photo-preview" id="photoPreview">
+                <span>Click to upload photo</span>
+              </div>
+            </div>
+
+            <button class="btn primary full" type="submit">Create account</button>
           </form>
           <p id="createMessage" class="message"></p>
         </div>
+
         <div class="card">
           <h2>Credit account</h2>
           <form id="creditForm">
@@ -217,7 +223,7 @@
     </div>
   </section>
 
-  <!-- Receipt -->
+  <!-- RECEIPT -->
   <section id="receiptView" class="sheet hidden">
     <div class="sheet-handle"></div>
     <h2>Transfer receipt</h2>
