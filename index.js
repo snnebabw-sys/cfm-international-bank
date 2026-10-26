@@ -6,6 +6,7 @@ const $ = id => document.getElementById(id);
 let token = sessionStorage.getItem("cfm-access-token") || "";
 let profile = null;
 let lastReceipt = null;
+let selectedPhotoDataUrl = null; // stores the uploaded photo
 
 function currencyFormat(amount, currency = "EUR") {
   try {
@@ -37,10 +38,10 @@ async function api(path, options = {}) {
   try {
     response = await fetch(`${API_BASE}${path}`, { ...options, headers });
   } catch {
-    throw new Error("Cannot reach the server. Check your connection.");
+    throw new Error("Cannot reach the server.");
   }
 
-  const data = await response.json().catch(() => ({ error: "Invalid server response." }));
+  const data = await response.json().catch(() => ({ error: "Invalid response" }));
 
   if (!response.ok) {
     if (response.status === 401) {
@@ -68,7 +69,7 @@ async function boot() {
   try {
     const data = await api("/api/me");
     profile = data.profile;
-    if (!profile || profile.status !== "active") throw new Error("Account inactive.");
+    if (!profile || profile.status !== "active") throw new Error("Account inactive");
 
     if (profile.role === "admin") {
       show("adminView");
@@ -98,18 +99,10 @@ if ($("loginForm")) {
           password: $("password").value
         })
       });
-      if (!data.access_token || !data.profile) throw new Error("Invalid login response.");
 
       token = data.access_token;
       profile = data.profile;
       sessionStorage.setItem("cfm-access-token", token);
-
-      if (profile.status !== "active") {
-        token = "";
-        profile = null;
-        sessionStorage.removeItem("cfm-access-token");
-        throw new Error("This account is inactive.");
-      }
 
       if (profile.role === "admin") {
         show("adminView");
@@ -120,52 +113,69 @@ if ($("loginForm")) {
       }
       message("authMessage", "", "");
     } catch (err) {
-      message("authMessage", err.message || "Unable to sign in.");
+      message("authMessage", err.message || "Unable to sign in");
     }
   });
 }
 
 /* ========== SIGN OUT ========== */
 async function doSignOut() {
-  try {
-    await api("/api/logout", { method: "POST", body: "{}" });
-  } catch {}
+  try { await api("/api/logout", { method: "POST", body: "{}" }); } catch {}
   token = "";
   profile = null;
   sessionStorage.removeItem("cfm-access-token");
   show("authView");
 }
+if ($("signOutBtn")) $("signOutBtn").addEventListener("click", doSignOut);
+if ($("adminSignOut")) $("adminSignOut").addEventListener("click", doSignOut);
 
-if ($("signOutBtn")) {
-  $("signOutBtn").addEventListener("click", doSignOut);
-}
-if ($("adminSignOut")) {
-  $("adminSignOut").addEventListener("click", doSignOut);
+/* ========== PHOTO UPLOAD (Admin) ========== */
+const photoInput = $("ownerPhoto");
+const photoPreview = $("photoPreview");
+
+if (photoPreview && photoInput) {
+  photoPreview.addEventListener("click", () => photoInput.click());
+
+  photoInput.addEventListener("change", () => {
+    const file = photoInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      selectedPhotoDataUrl = e.target.result;
+      photoPreview.innerHTML = `<img src="${selectedPhotoDataUrl}" alt="Owner photo">`;
+      photoPreview.classList.add("has-image");
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 /* ========== DASHBOARD ========== */
 async function loadDashboard() {
   const data = await api("/api/me/account");
   const account = data.account;
-  if (!account) throw new Error("Account not found.");
+  if (!account) throw new Error("Account not found");
 
   const name = account.full_name || "Customer";
-  if ($("customerAvatar")) $("customerAvatar").textContent = name.charAt(0).toUpperCase();
+
+  // Show photo if we have one saved for this user, otherwise letter
+  const savedPhoto = localStorage.getItem(`cfm-photo-${account.account_number}`);
+  if (savedPhoto) {
+    $("customerPhoto").src = savedPhoto;
+    $("customerPhoto").classList.remove("hidden");
+    $("customerInitial").classList.add("hidden");
+  } else {
+    $("customerPhoto").classList.add("hidden");
+    $("customerInitial").classList.remove("hidden");
+    $("customerInitial").textContent = name.charAt(0).toUpperCase();
+  }
 
   const bal = currencyFormat(account.balance, account.currency);
   if ($("balance")) $("balance").textContent = bal;
   if ($("netWorth")) $("netWorth").textContent = bal;
   if ($("cashBalance")) $("cashBalance").textContent = bal;
-
-  // Show the real generated account number
-  if ($("accountNumberValue")) {
-    $("accountNumberValue").textContent = account.account_number || "—";
-  }
-
-  // Update currency label
-  if ($("accountCurrencyLabel")) {
-    $("accountCurrencyLabel").textContent = `${account.currency || "USD"} Account`;
-  }
+  if ($("accountNumberValue")) $("accountNumberValue").textContent = account.account_number || "—";
+  if ($("accountCurrencyLabel")) $("accountCurrencyLabel").textContent = `${account.currency || "USD"} Account`;
 
   const txData = await api("/api/transactions");
   renderTransactions(txData.transactions || []);
@@ -196,20 +206,17 @@ function renderTransactions(items) {
 
     const info = document.createElement("div");
     info.className = "tx-info";
-
     const title = document.createElement("div");
     title.className = "tx-title";
     title.textContent = tx.description || (incoming ? "Received" : "Sent");
-
     const time = document.createElement("div");
     time.className = "tx-time";
     const d = new Date(tx.created_at);
     time.textContent = Number.isNaN(d.getTime()) ? "" : d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
     info.append(title, time);
 
     const amount = document.createElement("div");
-    amount.className = `tx-amount ${incoming ? "positive" : "negative"}`;
+    amount.className = `tx-amount ${incoming ? "positive" : ""}`;
     amount.textContent = `${incoming ? "+" : "−"}${currencyFormat(tx.amount, tx.currency)}`;
 
     row.append(flag, info, amount);
@@ -217,26 +224,20 @@ function renderTransactions(items) {
   });
 }
 
-/* ========== COPY ACCOUNT NUMBER ========== */
+/* COPY ACCOUNT */
 if ($("copyAccount")) {
   $("copyAccount").addEventListener("click", async () => {
     const num = $("accountNumberValue")?.textContent || "";
     try {
       await navigator.clipboard.writeText(num);
       $("copyAccount").textContent = "Copied";
-      setTimeout(() => {
-        $("copyAccount").textContent = "Copy";
-      }, 1500);
-    } catch {
-      $("copyAccount").textContent = "Copy";
-    }
+      setTimeout(() => $("copyAccount").textContent = "Copy", 1500);
+    } catch {}
   });
 }
 
-/* ========== TRANSFER ========== */
-function openTransfer() {
-  $("transferSheet")?.classList.remove("hidden");
-}
+/* TRANSFER */
+function openTransfer() { $("transferSheet")?.classList.remove("hidden"); }
 function closeTransfer() {
   $("transferSheet")?.classList.add("hidden");
   message("transferMessage", "", "");
@@ -252,13 +253,11 @@ if ($("transferForm")) {
   $("transferForm").addEventListener("submit", async e => {
     e.preventDefault();
     message("transferMessage", "Processing…", "");
-
     const amount = Number($("amount").value);
     if (!Number.isFinite(amount) || amount <= 0) {
-      message("transferMessage", "Enter a valid amount.");
+      message("transferMessage", "Enter a valid amount");
       return;
     }
-
     try {
       const result = await api("/api/transfers", {
         method: "POST",
@@ -270,13 +269,10 @@ if ($("transferForm")) {
           description: $("description").value.trim()
         })
       });
-
       message("transferMessage", "Transfer completed", "success");
       $("transferForm").reset();
       await loadDashboard();
-
-      lastReceipt = result.receipt;
-      if (lastReceipt) showReceipt(lastReceipt);
+      if (result.receipt) showReceipt(result.receipt);
       closeTransfer();
     } catch (err) {
       message("transferMessage", err.message || "Transfer failed");
@@ -285,9 +281,8 @@ if ($("transferForm")) {
 }
 
 function showReceipt(receipt) {
-  if (!receipt || !$("receiptView") || !$("receiptDetails")) return;
+  if (!receipt || !$("receiptView")) return;
   $("receiptView").classList.remove("hidden");
-
   const date = new Date(receipt.created_at);
   const rows = [
     ["Status", "Completed"],
@@ -301,26 +296,19 @@ function showReceipt(receipt) {
     ["Amount", currencyFormat(receipt.amount, receipt.currency)],
     ["Description", receipt.description || "—"]
   ];
-
   $("receiptDetails").replaceChildren();
   rows.forEach(([label, value]) => {
     const row = document.createElement("div");
     row.className = "receipt-row";
-    const l = document.createElement("span");
-    l.textContent = label;
-    const v = document.createElement("strong");
-    v.textContent = value || "—";
-    row.append(l, v);
+    row.innerHTML = `<span>${label}</span><strong>${value || "—"}</strong>`;
     $("receiptDetails").append(row);
   });
 }
 
 if ($("printReceipt")) $("printReceipt").addEventListener("click", () => window.print());
-if ($("closeReceipt")) $("closeReceipt").addEventListener("click", () => {
-  $("receiptView")?.classList.add("hidden");
-});
+if ($("closeReceipt")) $("closeReceipt").addEventListener("click", () => $("receiptView")?.classList.add("hidden"));
 
-/* ========== ADMIN ========== */
+/* ========== ADMIN CREATE (password min 6, photo support) ========== */
 if ($("createForm")) {
   $("createForm").addEventListener("submit", async e => {
     e.preventDefault();
@@ -329,12 +317,9 @@ if ($("createForm")) {
     const password = $("newPassword").value;
     const initialBalance = Number($("initialBalance").value);
 
-    if (password.length < 12) {
-      message("createMessage", "Password must be at least 12 characters.");
-      return;
-    }
-    if (!Number.isFinite(initialBalance) || initialBalance < 0) {
-      message("createMessage", "Enter a valid balance.");
+    // Only basic check – minimum 6 characters, no other rejection
+    if (password.length < 6) {
+      message("createMessage", "Password must be at least 6 characters");
       return;
     }
 
@@ -353,10 +338,25 @@ if ($("createForm")) {
         })
       });
 
-      message("createMessage", `Account created: ${data.account?.account_number || "—"}`, "success");
+      const accNumber = data.account?.account_number;
+
+      // Save the photo locally so it can appear in the mobile app
+      if (selectedPhotoDataUrl && accNumber) {
+        localStorage.setItem(`cfm-photo-${accNumber}`, selectedPhotoDataUrl);
+      }
+
+      message("createMessage", `Account created: ${accNumber || "—"}`, "success");
+
+      // Reset form
       $("createForm").reset();
+      selectedPhotoDataUrl = null;
+      if (photoPreview) {
+        photoPreview.innerHTML = "<span>Click to upload photo</span>";
+        photoPreview.classList.remove("has-image");
+      }
       if ($("newCountry")) $("newCountry").value = "United Kingdom";
       if ($("initialBalance")) $("initialBalance").value = "0";
+
       await loadAccounts();
     } catch (err) {
       message("createMessage", err.message || "Failed to create account");
@@ -368,13 +368,11 @@ if ($("creditForm")) {
   $("creditForm").addEventListener("submit", async e => {
     e.preventDefault();
     message("creditMessage", "Processing…", "");
-
     const amount = Number($("creditAmount").value);
     if (!Number.isFinite(amount) || amount <= 0) {
-      message("creditMessage", "Enter a valid amount.");
+      message("creditMessage", "Enter a valid amount");
       return;
     }
-
     try {
       await api("/api/admin/credit", {
         method: "POST",
@@ -393,24 +391,19 @@ if ($("creditForm")) {
   });
 }
 
-if ($("refreshAccounts")) {
-  $("refreshAccounts").addEventListener("click", () => loadAccounts());
-}
+if ($("refreshAccounts")) $("refreshAccounts").addEventListener("click", loadAccounts);
 
 async function loadAccounts() {
   const box = $("accountList");
   if (!box) return;
   box.textContent = "Loading…";
-
   try {
     const data = await api("/api/admin/accounts");
     box.replaceChildren();
-
-    if (!Array.isArray(data.accounts) || data.accounts.length === 0) {
-      box.textContent = "No accounts yet.";
+    if (!data.accounts?.length) {
+      box.textContent = "No accounts yet";
       return;
     }
-
     data.accounts.forEach(acc => {
       const item = document.createElement("div");
       item.className = "account-item";
@@ -422,7 +415,7 @@ async function loadAccounts() {
       box.append(item);
     });
   } catch (err) {
-    box.textContent = err.message || "Failed to load accounts";
+    box.textContent = err.message || "Failed to load";
   }
 }
 
