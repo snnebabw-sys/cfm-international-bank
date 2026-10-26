@@ -27,10 +27,9 @@
     </div>
   </section>
 
-  <!-- Customer Dashboard (matches your design) -->
+  <!-- Customer Dashboard -->
   <section id="customerView" class="screen hidden">
     <div class="phone-frame">
-      <!-- Status bar spacer -->
       <div class="status-bar"></div>
 
       <!-- Header -->
@@ -40,35 +39,39 @@
           <button class="tab active">Accounts</button>
           <button class="tab">Cards</button>
         </div>
-        <button class="icon-btn">
+        <button class="icon-btn" id="signOutBtn" title="Sign out">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
           </svg>
         </button>
       </header>
 
-      <!-- Main scrollable content -->
       <main class="app-content">
         <!-- Account Card -->
         <div class="account-card">
           <div class="card-top">
-            <span class="card-label">USD Account</span>
+            <span class="card-label" id="accountCurrencyLabel">USD Account</span>
             <span class="flag">🇬🇧</span>
           </div>
           <div class="card-balance" id="balance">€0.00</div>
+          <div class="account-number-row">
+            <span class="account-number" id="accountNumberValue">—</span>
+            <button class="copy-btn" id="copyAccount">Copy</button>
+          </div>
           <div class="card-actions">
-            <button class="action-btn" id="topUpBtn">
-              <span class="plus">+</span> Top up
+            <button class="action-btn" id="transferBtn">
+              <span class="plus">+</span> Transfer
             </button>
-            <button class="action-btn" id="sendBtn">
-              <span class="plus">+</span> Send
+            <button class="action-btn" id="depositBtn">
+              <span class="plus">+</span> Deposit
             </button>
-            <button class="action-btn" id="withdrawBtn">
-              <span class="plus">+</span> Withdraw
+            <button class="action-btn" id="tradeBtn">
+              <span class="plus">+</span> Trade
             </button>
-            <button class="action-btn more">
-              <span class="plus">+</span>
+            <button class="action-btn" id="cryptoBtn">
+              <span class="plus">+</span> Crypto
             </button>
           </div>
         </div>
@@ -79,9 +82,7 @@
             <h2>Transactions</h2>
             <button class="link" id="seeAllTx">See all</button>
           </div>
-          <div id="transactionList" class="tx-list">
-            <!-- populated by JS -->
-          </div>
+          <div id="transactionList" class="tx-list"></div>
         </section>
 
         <!-- Net Worth -->
@@ -130,7 +131,7 @@
       </nav>
     </div>
 
-    <!-- Transfer Sheet (slides up) -->
+    <!-- Transfer Sheet -->
     <div id="transferSheet" class="sheet hidden">
       <div class="sheet-handle"></div>
       <h2>Send money</h2>
@@ -161,12 +162,12 @@
     </div>
   </section>
 
-  <!-- Admin (kept simple & professional) -->
+  <!-- Admin -->
   <section id="adminView" class="screen hidden">
     <div class="admin-wrap">
       <header class="admin-header">
         <h1>Admin</h1>
-        <button id="signout" class="btn ghost">Sign out</button>
+        <button id="adminSignOut" class="btn ghost">Sign out</button>
       </header>
       <div class="admin-grid">
         <div class="card">
