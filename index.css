@@ -89,26 +89,35 @@ html, body {
 
 .app-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px 12px; flex-shrink: 0;
+  padding: 0 16px 12px; flex-shrink: 0; gap: 8px;
 }
+
+.user-info {
+  display: flex; align-items: center; gap: 10px; min-width: 0;
+}
+.user-text { display: flex; flex-direction: column; min-width: 0; }
+.user-name {
+  font-size: 13px; font-weight: 600; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;
+}
+.user-label { font-size: 11px; color: var(--muted); }
 
 .avatar-sm {
   width: 36px; height: 36px; border-radius: 50%;
   background: linear-gradient(135deg, #f97316, #ea580c);
   display: grid; place-items: center;
   font-weight: 700; font-size: 14px; color: white;
-  overflow: hidden; position: relative;
+  overflow: hidden; position: relative; flex-shrink: 0;
 }
-
 .avatar-sm img {
   width: 100%; height: 100%; object-fit: cover;
   position: absolute; inset: 0;
 }
 
-.tabs { display: flex; gap: 24px; }
+.tabs { display: flex; gap: 18px; }
 .tab {
   background: none; border: none; color: var(--muted);
-  font-size: 16px; font-weight: 600; cursor: pointer;
+  font-size: 15px; font-weight: 600; cursor: pointer;
 }
 .tab.active { color: var(--text); position: relative; }
 .tab.active::after {
@@ -118,7 +127,7 @@ html, body {
 
 .icon-btn {
   background: none; border: none; color: var(--text);
-  cursor: pointer; padding: 6px;
+  cursor: pointer; padding: 6px; flex-shrink: 0;
 }
 
 .app-content {
@@ -147,7 +156,7 @@ html, body {
 .flag { font-size: 20px; }
 
 .card-balance {
-  font-size: 36px; font-weight: 700; letter-spacing: -1px;
+  font-size: 34px; font-weight: 700; letter-spacing: -1px;
   margin-bottom: 8px; position: relative; z-index: 1;
 }
 
@@ -299,9 +308,7 @@ html, body {
   cursor: pointer; overflow: hidden; background: var(--bg);
   color: var(--muted); font-size: 13px; text-align: center;
 }
-.photo-preview img {
-  width: 100%; height: 100%; object-fit: cover;
-}
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 .photo-preview.has-image { border-style: solid; border-color: var(--blue); }
 
 .account-item {
