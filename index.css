@@ -34,7 +34,7 @@ html, body {
 
 .hidden { display: none !important; }
 
-/* ========== AUTH ========== */
+/* AUTH */
 .auth-card {
   width: min(380px, 92%);
   background: var(--surface);
@@ -93,7 +93,7 @@ html, body {
   border-color: var(--blue);
 }
 
-/* ========== PHONE FRAME (matches screenshot) ========== */
+/* PHONE FRAME */
 .phone-frame {
   width: 100%;
   max-width: 390px;
@@ -189,7 +189,7 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Account Card – exact match to screenshot */
+/* Account Card */
 .account-card {
   background: linear-gradient(145deg, #1e6ef5 0%, #1452c4 100%);
   border-radius: 20px;
@@ -233,14 +233,42 @@ html, body {
   font-size: 36px;
   font-weight: 700;
   letter-spacing: -1px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   position: relative;
   z-index: 1;
 }
 
+/* Account Number */
+.account-number-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.account-number {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.copy-btn {
+  background: rgba(255,255,255,0.18);
+  border: none;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
 .card-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   z-index: 1;
 }
@@ -251,14 +279,14 @@ html, body {
   border: none;
   border-radius: 12px;
   color: white;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 12px 8px;
+  padding: 12px 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
   backdrop-filter: blur(8px);
   transition: background 0.15s;
 }
@@ -267,12 +295,8 @@ html, body {
   background: rgba(255,255,255,0.25);
 }
 
-.action-btn.more {
-  flex: 0 0 48px;
-}
-
 .plus {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
 }
 
@@ -496,7 +520,7 @@ html, body {
 
 .btn.full { width: 100%; margin-top: 12px; }
 
-/* Sheet (transfer / receipt) */
+/* Sheet */
 .sheet {
   position: fixed;
   bottom: 0;
@@ -632,7 +656,7 @@ hr {
   margin: 24px 0;
 }
 
-/* Receipt rows */
+/* Receipt */
 .receipt-row {
   display: flex;
   justify-content: space-between;
