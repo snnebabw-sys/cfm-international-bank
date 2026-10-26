@@ -125,14 +125,22 @@ if ($("loginForm")) {
   });
 }
 
-if ($("signout")) {
-  $("signout").addEventListener("click", async () => {
-    try { await api("/api/logout", { method: "POST", body: "{}" }); } catch {}
-    token = "";
-    profile = null;
-    sessionStorage.removeItem("cfm-access-token");
-    show("authView");
-  });
+/* ========== SIGN OUT ========== */
+async function doSignOut() {
+  try {
+    await api("/api/logout", { method: "POST", body: "{}" });
+  } catch {}
+  token = "";
+  profile = null;
+  sessionStorage.removeItem("cfm-access-token");
+  show("authView");
+}
+
+if ($("signOutBtn")) {
+  $("signOutBtn").addEventListener("click", doSignOut);
+}
+if ($("adminSignOut")) {
+  $("adminSignOut").addEventListener("click", doSignOut);
 }
 
 /* ========== DASHBOARD ========== */
@@ -148,6 +156,16 @@ async function loadDashboard() {
   if ($("balance")) $("balance").textContent = bal;
   if ($("netWorth")) $("netWorth").textContent = bal;
   if ($("cashBalance")) $("cashBalance").textContent = bal;
+
+  // Show the real generated account number
+  if ($("accountNumberValue")) {
+    $("accountNumberValue").textContent = account.account_number || "—";
+  }
+
+  // Update currency label
+  if ($("accountCurrencyLabel")) {
+    $("accountCurrencyLabel").textContent = `${account.currency || "USD"} Account`;
+  }
 
   const txData = await api("/api/transactions");
   renderTransactions(txData.transactions || []);
@@ -199,7 +217,23 @@ function renderTransactions(items) {
   });
 }
 
-/* ========== TRANSFER SHEET ========== */
+/* ========== COPY ACCOUNT NUMBER ========== */
+if ($("copyAccount")) {
+  $("copyAccount").addEventListener("click", async () => {
+    const num = $("accountNumberValue")?.textContent || "";
+    try {
+      await navigator.clipboard.writeText(num);
+      $("copyAccount").textContent = "Copied";
+      setTimeout(() => {
+        $("copyAccount").textContent = "Copy";
+      }, 1500);
+    } catch {
+      $("copyAccount").textContent = "Copy";
+    }
+  });
+}
+
+/* ========== TRANSFER ========== */
 function openTransfer() {
   $("transferSheet")?.classList.remove("hidden");
 }
@@ -208,9 +242,10 @@ function closeTransfer() {
   message("transferMessage", "", "");
 }
 
-if ($("sendBtn")) $("sendBtn").addEventListener("click", openTransfer);
-if ($("topUpBtn")) $("topUpBtn").addEventListener("click", () => alert("Top-up coming soon"));
-if ($("withdrawBtn")) $("withdrawBtn").addEventListener("click", () => alert("Withdraw coming soon"));
+if ($("transferBtn")) $("transferBtn").addEventListener("click", openTransfer);
+if ($("depositBtn")) $("depositBtn").addEventListener("click", () => alert("Deposit coming soon"));
+if ($("tradeBtn")) $("tradeBtn").addEventListener("click", () => alert("Trade coming soon"));
+if ($("cryptoBtn")) $("cryptoBtn").addEventListener("click", () => alert("Crypto coming soon"));
 if ($("closeTransfer")) $("closeTransfer").addEventListener("click", closeTransfer);
 
 if ($("transferForm")) {
