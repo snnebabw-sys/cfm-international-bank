@@ -13,14 +13,14 @@
   <section id="authView" class="screen">
     <div class="auth-card">
       <div class="logo-mark">CFM</div>
-      <h1>Welcome back</h1>
-      <p class="subtitle">Sign in to your CFM account</p>
+      <h1 data-i18n="welcome">Welcome back</h1>
+      <p class="subtitle" data-i18n="loginSubtitle">Sign in to your CFM account</p>
       <form id="loginForm">
-        <label>Email</label>
+        <label data-i18n="email">Email</label>
         <input id="email" type="email" autocomplete="username" required placeholder="you@email.com">
-        <label>Password</label>
+        <label data-i18n="password">Password</label>
         <input id="password" type="password" autocomplete="current-password" required placeholder="••••••••">
-        <button class="btn primary full" type="submit">Sign in</button>
+        <button class="btn primary full" type="submit" data-i18n="signIn">Sign in</button>
       </form>
       <p id="authMessage" class="message"></p>
     </div>
@@ -32,14 +32,22 @@
       <div class="status-bar"></div>
 
       <header class="app-header">
-        <div class="avatar-sm" id="customerAvatar">
-          <img id="customerPhoto" class="hidden" alt="Owner">
-          <span id="customerInitial">C</span>
+        <div class="user-info">
+          <div class="avatar-sm" id="customerAvatar">
+            <img id="customerPhoto" class="hidden" alt="Owner">
+            <span id="customerInitial">C</span>
+          </div>
+          <div class="user-text">
+            <div class="user-name" id="customerName">—</div>
+            <div class="user-label" data-i18n="accountHolder">Account Holder</div>
+          </div>
         </div>
+
         <div class="tabs">
-          <button class="tab active">Accounts</button>
-          <button class="tab">Cards</button>
+          <button class="tab active" data-i18n="accounts">Accounts</button>
+          <button class="tab" data-i18n="cards">Cards</button>
         </div>
+
         <button class="icon-btn" id="signOutBtn" title="Sign out">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -58,33 +66,33 @@
           <div class="card-balance" id="balance">€0.00</div>
           <div class="account-number-row">
             <span class="account-number" id="accountNumberValue">—</span>
-            <button class="copy-btn" id="copyAccount">Copy</button>
+            <button class="copy-btn" id="copyAccount" data-i18n="copy">Copy</button>
           </div>
           <div class="card-actions">
-            <button class="action-btn" id="transferBtn"><span class="plus">+</span> Transfer</button>
-            <button class="action-btn" id="depositBtn"><span class="plus">+</span> Deposit</button>
-            <button class="action-btn" id="tradeBtn"><span class="plus">+</span> Trade</button>
-            <button class="action-btn" id="cryptoBtn"><span class="plus">+</span> Crypto</button>
+            <button class="action-btn" id="transferBtn"><span class="plus">+</span> <span data-i18n="transfer">Transfer</span></button>
+            <button class="action-btn" id="depositBtn"><span class="plus">+</span> <span data-i18n="deposit">Deposit</span></button>
+            <button class="action-btn" id="tradeBtn"><span class="plus">+</span> <span data-i18n="trade">Trade</span></button>
+            <button class="action-btn" id="cryptoBtn"><span class="plus">+</span> <span data-i18n="crypto">Crypto</span></button>
           </div>
         </div>
 
         <section class="section">
           <div class="section-header">
-            <h2>Transactions</h2>
-            <button class="link">See all</button>
+            <h2 data-i18n="transactions">Transactions</h2>
+            <button class="link" data-i18n="seeAll">See all</button>
           </div>
           <div id="transactionList" class="tx-list"></div>
         </section>
 
         <section class="section net-worth">
-          <h2>Net Worth</h2>
+          <h2 data-i18n="netWorth">Net Worth</h2>
           <div class="net-value" id="netWorth">€0.00</div>
-          <p class="muted">Current value</p>
+          <p class="muted" data-i18n="currentValue">Current value</p>
           <div class="cash-row">
             <div class="cash-left">
               <div class="cash-icon">💰</div>
               <div>
-                <div class="cash-label">Cash balance</div>
+                <div class="cash-label" data-i18n="cashBalance">Cash balance</div>
                 <div class="cash-sub">3 accounts</div>
               </div>
             </div>
@@ -102,20 +110,20 @@
             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
           </svg>
-          <span>Overview</span>
+          <span data-i18n="overview">Overview</span>
         </button>
         <button class="nav-item">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
-          <span>Transactions</span>
+          <span data-i18n="transactions">Transactions</span>
         </button>
         <button class="nav-item">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="3"/>
             <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
           </svg>
-          <span>Settings</span>
+          <span data-i18n="settings">Settings</span>
         </button>
       </nav>
     </div>
@@ -123,30 +131,65 @@
     <!-- Transfer Sheet -->
     <div id="transferSheet" class="sheet hidden">
       <div class="sheet-handle"></div>
-      <h2>Send money</h2>
+      <h2 data-i18n="sendMoney">Send money</h2>
       <form id="transferForm">
-        <label>Receiver full name</label>
+        <label data-i18n="receiverName">Receiver full name</label>
         <input id="receiverName" required maxlength="100">
-        <label>Account number</label>
+        <label data-i18n="receiverAccount">Account number</label>
         <input id="receiverAccount" required maxlength="24">
-        <label>Country</label>
+        <label data-i18n="receiverCountry">Country</label>
         <select id="receiverCountry" required>
+          <option value="">Select country</option>
           <option value="United Kingdom">United Kingdom</option>
-          <option value="Nigeria">Nigeria</option>
           <option value="United States">United States</option>
+          <option value="Nigeria">Nigeria</option>
+          <option value="Colombia">Colombia</option>
+          <option value="Thailand">Thailand</option>
+          <option value="Indonesia">Indonesia</option>
+          <option value="Malaysia">Malaysia</option>
+          <option value="Chile">Chile</option>
+          <option value="Russia">Russia</option>
           <option value="Canada">Canada</option>
           <option value="France">France</option>
           <option value="Germany">Germany</option>
+          <option value="Spain">Spain</option>
+          <option value="Italy">Italy</option>
+          <option value="Brazil">Brazil</option>
+          <option value="Mexico">Mexico</option>
+          <option value="Argentina">Argentina</option>
+          <option value="Peru">Peru</option>
+          <option value="Philippines">Philippines</option>
+          <option value="Vietnam">Vietnam</option>
+          <option value="Singapore">Singapore</option>
+          <option value="India">India</option>
+          <option value="China">China</option>
+          <option value="Japan">Japan</option>
+          <option value="South Korea">South Korea</option>
+          <option value="Australia">Australia</option>
+          <option value="South Africa">South Africa</option>
+          <option value="Ghana">Ghana</option>
+          <option value="Kenya">Kenya</option>
+          <option value="United Arab Emirates">United Arab Emirates</option>
+          <option value="Saudi Arabia">Saudi Arabia</option>
+          <option value="Turkey">Turkey</option>
+          <option value="Poland">Poland</option>
+          <option value="Netherlands">Netherlands</option>
+          <option value="Belgium">Belgium</option>
+          <option value="Sweden">Sweden</option>
+          <option value="Norway">Norway</option>
+          <option value="Denmark">Denmark</option>
+          <option value="Switzerland">Switzerland</option>
+          <option value="Portugal">Portugal</option>
           <option value="Other">Other</option>
         </select>
-        <label>Amount</label>
+        <label data-i18n="amount">Amount</label>
         <input id="amount" type="number" min="0.01" step="0.01" required>
-        <label>Description (optional)</label>
+        <label data-i18n="description">Description (optional)</label>
         <input id="description" maxlength="120">
-        <button class="btn primary full" type="submit">Send</button>
+        <button class="btn primary full" type="submit" data-i18n="send">Send</button>
       </form>
       <p id="transferMessage" class="message"></p>
-      <button class="btn ghost full" id="closeTransfer">Cancel</button>
+      <button class="btn ghost full" id="closeTransfer" data-i18n="cancel">Cancel</button>
     </div>
   </section>
 
@@ -164,16 +207,12 @@
           <form id="createForm">
             <label>Full name</label>
             <input id="newName" required>
-
             <label>Email</label>
             <input id="newEmail" type="email" required>
-
             <label>Phone</label>
             <input id="newPhone" type="tel">
-
             <label>Country</label>
             <input id="newCountry" value="United Kingdom" required>
-
             <label>Currency</label>
             <select id="newCurrency">
               <option value="GBP">GBP</option>
@@ -181,14 +220,11 @@
               <option value="EUR">EUR</option>
               <option value="NGN">NGN</option>
             </select>
-
             <label>Password (min 6 characters)</label>
             <input id="newPassword" type="password" minlength="6" required>
-
             <label>Initial balance</label>
             <input id="initialBalance" type="number" min="0" step="0.01" value="0">
 
-            <!-- PHOTO UPLOAD -->
             <label>Passport / Photo of owner</label>
             <div class="photo-upload">
               <input type="file" id="ownerPhoto" accept="image/*">
@@ -226,10 +262,10 @@
   <!-- RECEIPT -->
   <section id="receiptView" class="sheet hidden">
     <div class="sheet-handle"></div>
-    <h2>Transfer receipt</h2>
+    <h2 data-i18n="receipt">Transfer receipt</h2>
     <div id="receiptDetails"></div>
-    <button id="printReceipt" class="btn primary full">Print</button>
-    <button id="closeReceipt" class="btn ghost full">Close</button>
+    <button id="printReceipt" class="btn primary full" data-i18n="print">Print</button>
+    <button id="closeReceipt" class="btn ghost full" data-i18n="close">Close</button>
   </section>
 
   <script src="index.js" defer></script>
